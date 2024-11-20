@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QVBoxLayout, QLabel, QComboBox
-
+from PyQt5.QtCore import Qt
 ''' 1 шаг Создание основного окна:
 импорты - sys для завершения приложения
             QApplication - для запуска любого приложения PyQt
@@ -90,9 +90,16 @@ class ConverterApp(QWidget):
 
         self.setLayout(layout) # set layout from above
 
+        self.apply_styles()
+
     def convert_value(self):
         try:
-            input_text = self.input_field.text()  # get the text from the field
+            input_text = self.input_field.text().strip()  # get the text from the field
+
+            if not input_text:
+                self.result.setText("Error: Input cannot be empty!")
+                return
+
             input_number = float(input_text) # convert string to float type
 
             from_unit = self.from_unit.currentText() # get the user's choice from combobox
@@ -112,6 +119,60 @@ class ConverterApp(QWidget):
                                                             # result is the result of calculation
         except ValueError:                                   # {to_unit} a key in the dict that a user chose
             self.result.setText('Error: please enter a valid number') # if not a num, show an error text
+
+    def apply_styles(self):
+        self.setStyleSheet("""
+            QWidget {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f9;
+            }
+            QLineEdit {
+                padding: 5px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                margin: 10px 0;
+            }
+            QLabel {
+                font-size: 18px;
+                color: #333;
+                margin: 10px 0;
+            }
+            QPushButton {
+                background-color: #4CAF50;
+                color: white;
+                font-size: 16px;
+                padding: 10px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            QPushButton:hover {
+                background-color: #45a049;
+            }
+            QComboBox {
+                padding: 5px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                margin: 10px 0;
+                min-width: 150px;
+            }
+            QComboBox::drop-down {
+                subcontrol-origin: padding;
+                subcontrol-position: top right;
+                width: 20px;
+                border-left: 1px solid #ccc;
+                border-top-right-radius: 5px;
+                border-bottom-right-radius: 5px;
+            }
+            QComboBox::down-arrow {
+                image: url('./down-arrow.png'); 
+                width: 20px;
+                height: 20px;
+            }
+        """)
+
 
 '''
 app = QApplication(sys.argv) — создает объект приложения, который управляет главным циклом событий.
