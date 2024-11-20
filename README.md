@@ -38,10 +38,10 @@
 
 ```bash
 python3 main.py
-
+```
 
 ## Демонстрация работы приложения
 
 Ниже показана демонстрация работы конвертера единиц измерения:
 
-![Демонстрация](assets/converter.gif)
+![Демонстрация](https://github.com/AnastasiiaXX/PyQT-1st-project/blob/main/assets/converter.gif)
