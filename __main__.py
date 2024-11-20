@@ -20,8 +20,14 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QVBox
 По сути, self.setLayout(layout) связывает компоновку (layout) с текущим виджетом, завершая процесс настройки расположения.
 
     3 шаг Логика нажатия кнопки
-    Кнопка будет считывать введённое значение из текстового поля 
-    и отображать преобразованный результат (пока просто в консоли, чтобы проверить работу).
+Кнопка будет считывать введённое значение из текстового поля 
+и отображать преобразованный результат (пока просто в консоли, чтобы проверить работу).
+    
+Связать кнопку с функцией: для этого используется метод clicked.connect(). 
+Он связывает кнопку с определённой функцией, которая будет выполняться при нажатии.
+
+Создать функцию для обработки события: эта функция будет считывать текст из текстового поля и выводить его в консоль.
+
     
 '''
 class ConverterApp(QWidget):
@@ -34,11 +40,19 @@ class ConverterApp(QWidget):
         self.input_field.setPlaceholderText('Enter value to convert') # leave a hint for a user
         self.convert_button = QPushButton('Convert', self)
 
+        self.convert_button.clicked.connect(self.convert_value)
+
         layout = QVBoxLayout(self) # create layout, adding elements to layout
         layout.addWidget(self.input_field)
         layout.addWidget(self.convert_button)
 
         self.setLayout(layout) # set layout from above
+
+    def convert_value(self):
+        input_text = self.input_field.text() # get the text from the field
+        print(f'Input value: {input_text}') # print in the console
+
+
 
 
 '''
