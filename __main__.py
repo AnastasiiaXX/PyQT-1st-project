@@ -32,6 +32,11 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QVBox
 Добавить метку для вывода результата: используем QLabel, который будет обновляться при нажатии кнопки.
 Обновить метод convert_value: вместо вывода текста в консоль будем менять текст метки.
     
+    5 шаг Добавление логики конвертации
+Начинаем с конвертации чисел.
+Добавить проверку ввода, чтобы работать только с числами.
+Реализовать простую логику конвертации (например, умножение числа на 1000 для перевода километров в метры).
+Если пользователь вводит нечисловое значение, выводить ошибку в метке результата.
 '''
 class ConverterApp(QWidget):
     def __init__(self):
@@ -56,8 +61,12 @@ class ConverterApp(QWidget):
 
     def convert_value(self):
         input_text = self.input_field.text() # get the text from the field
-        converted_text = f'Converted: {input_text}' # just add information to user's input, add two strings
-        self.result.setText(converted_text) # update label text
+        try:
+            input_number = float(input_text) # convert text to float type
+            converted_number = input_number * 1000 # convert float (f.e. to meters from kms)
+            self.result.setText(f'Converted: {converted_number} meters') # update label based on conversion
+        except ValueError:
+            self.result.setText('Error: please enter a valid number') # if not a num, show an error text
 
 
 
