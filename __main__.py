@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QVBoxLayout, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QVBoxLayout, QLabel, QComboBox
 
 ''' 1 шаг Создание основного окна:
 импорты - sys для завершения приложения
@@ -37,6 +37,27 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QVBox
 Добавить проверку ввода, чтобы работать только с числами.
 Реализовать простую логику конвертации (например, умножение числа на 1000 для перевода километров в метры).
 Если пользователь вводит нечисловое значение, выводить ошибку в метке результата.
+
+    Шаг 6: Добавление выбора единиц измерения
+Теперь мы добавим два выпадающих списка (QComboBox) для выбора исходной и целевой единиц измерения.
+Создать выпадающие списки:
+Один для выбора исходной единицы.
+Второй для выбора целевой единицы.
+
+Добавить их в компоновку:
+Расположим выпадающие списки над полем ввода и кнопкой.
+Заполнить выпадающие списки вариантами: "kilometers", "meters", "miles".
+
+    Шаг 7: Реализация логики преобразования
+Создадим словарь с коэффициентами преобразования: для преобразования из километров в метры, мили и так далее.
+
+Получим выбранные пользователем единицы:будем получать выбранные значения из двух выпадающих списков (исходную и целевую единицу).
+
+Используем коэффициенты для преобразования:
+Если выбранные единицы одинаковые (например, километры в километры), просто вернем исходное значение.
+Если они разные, применим коэффициент из словаря.
+
+Обновим результат: После преобразования обновим текст на метке с результатом.
 '''
 class ConverterApp(QWidget):
     def __init__(self):
@@ -50,26 +71,47 @@ class ConverterApp(QWidget):
 
         self.convert_button.clicked.connect(self.convert_value)
 
+        self.from_unit = QComboBox()  # two combo boxes "from _unit_ to _unit_"
+        self.to_unit = QComboBox()
+
+        units = ['meters', 'kilometers', 'miles'] # add list of units to combobox
+        self.from_unit.addItems(units)
+        self.to_unit.addItems(units)
+
         layout = QVBoxLayout(self) # create layout, adding elements to layout
+        layout.addWidget(self.from_unit)
+        layout.addWidget(self.to_unit)
         layout.addWidget(self.input_field)
         layout.addWidget(self.convert_button)
 
         self.result = QLabel('Result will be shown here', self) # create a label and add it to layout to show the result
         layout.addWidget(self.result)
 
+
         self.setLayout(layout) # set layout from above
 
     def convert_value(self):
-        input_text = self.input_field.text() # get the text from the field
         try:
-            input_number = float(input_text) # convert text to float type
-            converted_number = input_number * 1000 # convert float (f.e. to meters from kms)
-            self.result.setText(f'Converted: {converted_number} meters') # update label based on conversion
-        except ValueError:
+            input_text = self.input_field.text()  # get the text from the field
+            input_number = float(input_text) # convert string to float type
+
+            from_unit = self.from_unit.currentText() # get the user's choice from combobox
+            to_unit = self.to_unit.currentText()
+
+            conversion_rates = { # a dictionary with coefficients
+                'kilometers': 1.0,
+                'meters': 1000,
+                'miles': 0.621371,
+            }
+
+            if from_unit == to_unit: # if the same measurements, return user's input
+                result = input_number
+            else: #conversion_rates[to_unit] = to_unit is a string from to_unit = self.to_unit.currentText() that corresponds with the same key in the dict
+                result = input_number * (conversion_rates[to_unit] / conversion_rates[from_unit])
+            self.result.setText(f'Converted: {result} {to_unit}') # update label based on conversion
+                                                            # result is the result of calculation
+        except ValueError:                                   # {to_unit} a key in the dict that a user chose
             self.result.setText('Error: please enter a valid number') # if not a num, show an error text
-
-
-
 
 '''
 app = QApplication(sys.argv) — создает объект приложения, который управляет главным циклом событий.
