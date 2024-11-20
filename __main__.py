@@ -110,7 +110,7 @@ class ConverterApp(QWidget):
                 border-bottom-right-radius: 5px;
             }
             QComboBox::down-arrow {
-                image: url('./down-arrow.png'); 
+                image: url('assets/icons/down-arrow.png'); 
                 width: 20px;
                 height: 20px;
             }
