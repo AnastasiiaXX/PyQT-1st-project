@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QVBoxLayout, QLabel
 
 ''' 1 шаг Создание основного окна:
 импорты - sys для завершения приложения
@@ -28,6 +28,9 @@ from PyQt5.QtWidgets import QApplication, QWidget, QLineEdit, QPushButton, QVBox
 
 Создать функцию для обработки события: эта функция будет считывать текст из текстового поля и выводить его в консоль.
 
+    4 шаг Вывод результата
+Добавить метку для вывода результата: используем QLabel, который будет обновляться при нажатии кнопки.
+Обновить метод convert_value: вместо вывода текста в консоль будем менять текст метки.
     
 '''
 class ConverterApp(QWidget):
@@ -46,11 +49,15 @@ class ConverterApp(QWidget):
         layout.addWidget(self.input_field)
         layout.addWidget(self.convert_button)
 
+        self.result = QLabel('Result will be shown here', self) # create a label and add it to layout to show the result
+        layout.addWidget(self.result)
+
         self.setLayout(layout) # set layout from above
 
     def convert_value(self):
         input_text = self.input_field.text() # get the text from the field
-        print(f'Input value: {input_text}') # print in the console
+        converted_text = f'Converted: {input_text}' # just add information to user's input, add two strings
+        self.result.setText(converted_text) # update label text
 
 
 
